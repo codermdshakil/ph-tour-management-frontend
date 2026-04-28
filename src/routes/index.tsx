@@ -1,6 +1,8 @@
 
 import { createBrowserRouter } from "react-router"
 import App from "../App"
+import AdminLayout from "../components/layout/AdminLayout"
+import Analytics from "../components/layout/Analytics"
 import AboutPage from "../pages/AboutPage"
 
 export const router = createBrowserRouter([
@@ -14,7 +16,16 @@ export const router = createBrowserRouter([
         path:"about"
       }
     ]
-    
+  },
+  {
+    Component:AdminLayout,
+    path:"/admin",
+    children:[
+      {
+        path:"analytics",
+        Component:Analytics
+      }
+    ]
   }
   
 ])

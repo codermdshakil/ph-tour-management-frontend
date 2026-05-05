@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Navber from "./Navber";
 
 export interface IProps{
-  children: ReactNode
+  children: ReactNode 
 }
 
 

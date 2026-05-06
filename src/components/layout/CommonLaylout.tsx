@@ -9,10 +9,9 @@ export interface IProps{
 
 const CommonLaylout = ({children}:IProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Navber/>
       <div className="grow">
-        
       {children}
       </div>
       <Footer/>

@@ -2,13 +2,13 @@
 import { createBrowserRouter } from "react-router"
 import App from "../App"
 import AdminLayout from "../components/layout/AdminLayout"
+import Analytics from "../components/layout/Analytics"
 import AboutPage from "../pages/AboutPage"
-import Analytics from "../pages/Analytics"
 
 export const router = createBrowserRouter([
   {
     // element:<App/>,
-    Component:App, // component way is best
+    Component:App,
     path:"/",
     children:[
       {

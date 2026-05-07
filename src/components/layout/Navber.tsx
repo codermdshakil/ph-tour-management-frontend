@@ -2,7 +2,7 @@
 import { Link } from "react-router";
 import Logo from "../../assets/Icons/Logo";
 import { Button } from "../ui/button";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "../ui/navigation-menu";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "../ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ModeToggle } from "./ModeToggle";
 
@@ -58,12 +58,11 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink
-                        href={link.href}
-                        className="py-1.5"
-                      >
-                        {link.label}
-                      </NavigationMenuLink>
+                     <NavigationMenuItem key={index}>
+                     
+                      {/* it don't refresh */}
+                      <Link to={link.href} >{link.label}</Link>
+                  </NavigationMenuItem>
                     </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
@@ -92,11 +91,9 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           <ModeToggle/>
-          <Button  variant="ghost" size="sm" className="text-sm">
-            <a href="#">Sign In</a>
-          </Button>
-          <Button  size="sm" className="text-sm">
-            <a href="#">Get Started</a>
+          
+          <Button  className="text-sm">
+            <Link to={"/login"} >Login</Link>
           </Button>
         </div>
       </div>

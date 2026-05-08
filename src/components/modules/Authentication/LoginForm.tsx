@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
- 
 
 // import { useLoginMutation } from "@/redux/features/auth/auth.api";
 
@@ -8,7 +7,14 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../ui/form";
 import { Input } from "../../ui/input";
 
 export function LoginForm({
@@ -21,13 +27,18 @@ export function LoginForm({
   // const [login] = useLoginMutation();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+
+    // console.log(data, "hit..");
+    
     try {
-      const res = await login(data).unwrap();
+
+      const res = await login(data);
       console.log(res);
+
     } catch (err) {
       console.error(err);
 
-      if (err.status as any === 401) {
+      if ((err as any).status === 401) {
         toast.error("Your account is not verified");
         navigate("/verify", { state: data.email });
       }
@@ -43,9 +54,9 @@ export function LoginForm({
         </p>
       </div>
       <div className="grid gap-6">
-        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* email */}
             <FormField
               control={form.control}
               name="email"
@@ -64,6 +75,7 @@ export function LoginForm({
               )}
             />
 
+            {/* password */}
             <FormField
               control={form.control}
               name="password"
@@ -98,8 +110,7 @@ export function LoginForm({
         <Button
           type="button"
           variant="outline"
-          className="w-full cursor-pointer"
-        >
+          className="w-full cursor-pointer">
           Login with Google
         </Button>
       </div>

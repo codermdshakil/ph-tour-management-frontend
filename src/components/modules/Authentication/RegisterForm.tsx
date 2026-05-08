@@ -1,17 +1,21 @@
-
- 
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 
 // import { zodResolver } from "@hookform/resolvers/zod";
 
-
-
 import { toast } from "sonner";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../ui/form";
 import { Input } from "../../ui/input";
 import Password from "../../ui/Password";
 
@@ -38,9 +42,8 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-
   // const [register] = useRegisterMutation();
-  
+
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -59,14 +62,13 @@ export function RegisterForm({
       email: data.email,
       password: data.password,
     };
-
     try {
       const result = await register(userInfo).unwrap();
       console.log(result);
       toast.success("User created successfully");
       navigate("/verify");
     } catch (error) {
-      console.error(error);
+      console.error(error, "error");
     }
   };
 
@@ -82,6 +84,8 @@ export function RegisterForm({
       <div className="grid gap-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
+            {/* name  */}
             <FormField
               control={form.control}
               name="name"
@@ -98,6 +102,8 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
+
+            {/* email field */}
             <FormField
               control={form.control}
               name="email"
@@ -118,6 +124,8 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
+
+            {/* password */}
             <FormField
               control={form.control}
               name="password"
@@ -134,6 +142,8 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
+
+            {/* confirm Password */}
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -150,6 +160,7 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
+
             <Button type="submit" className="w-full">
               Submit
             </Button>
@@ -165,8 +176,7 @@ export function RegisterForm({
         <Button
           type="button"
           variant="outline"
-          className="w-full cursor-pointer"
-        >
+          className="w-full cursor-pointer">
           Login with Google
         </Button>
       </div>
@@ -182,6 +192,10 @@ export function RegisterForm({
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function register(_userInfo: { name: string; email: string; password: string; }) {
+function register(_userInfo: {
+  name: string;
+  email: string;
+  password: string;
+}) {
   throw new Error("Function not implemented.");
 }

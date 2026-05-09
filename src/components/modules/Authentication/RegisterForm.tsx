@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { z } from "zod";
 
-// import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { toast } from "sonner";
+
 import { cn } from "../../../lib/utils";
 import { Button } from "../../ui/button";
 import {
@@ -44,10 +44,10 @@ export function RegisterForm({
 }: React.HTMLAttributes<HTMLDivElement>) {
   // const [register] = useRegisterMutation();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
-    // resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -57,19 +57,8 @@ export function RegisterForm({
   });
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    };
-    try {
-      const result = await register(userInfo).unwrap();
-      console.log(result);
-      toast.success("User created successfully");
-      navigate("/verify");
-    } catch (error) {
-      console.error(error, "error");
-    }
+     
+    console.log(data, "hit..");
   };
 
   return (
@@ -191,11 +180,4 @@ export function RegisterForm({
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function register(_userInfo: {
-  name: string;
-  email: string;
-  password: string;
-}) {
-  throw new Error("Function not implemented.");
-}
+ 

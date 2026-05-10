@@ -2,9 +2,11 @@
 
 // import { useLoginMutation } from "@/redux/features/auth/auth.api";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
+import z from "zod";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../ui/button";
 import {
@@ -17,12 +19,25 @@ import {
 } from "../../ui/form";
 import { Input } from "../../ui/input";
 
+const formSchema = z.object({
+  name:z.string(),
+  password:z.string()
+})
+
 export function LoginForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+  
   const navigate = useNavigate();
-  const form = useForm();
+
+  const form = useForm<z.infer< typeof formSchema >>({
+    resolver: zodResolver(formSchema),
+    defaultValues:{
+      name:"",
+      password:""
+    }
+  })
 
   // const [login] = useLoginMutation();
 
@@ -59,7 +74,7 @@ export function LoginForm({
             {/* email */}
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>

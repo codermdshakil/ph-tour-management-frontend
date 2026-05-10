@@ -43,7 +43,7 @@ export function LoginForm({
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 
-    // console.log(data, "hit..");
+    console.log(data, "hit..");
     
     try {
 

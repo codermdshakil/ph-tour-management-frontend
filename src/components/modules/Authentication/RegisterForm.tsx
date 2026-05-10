@@ -1,6 +1,10 @@
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { z } from "zod";
 
-// import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -42,6 +46,10 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+  // const [register] = useRegisterMutation();
+
+  // const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -53,6 +61,7 @@ export function RegisterForm({
   });
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+     
     console.log(data, "hit..");
   };
 
@@ -169,3 +178,5 @@ export function RegisterForm({
     </div>
   );
 }
+
+ 

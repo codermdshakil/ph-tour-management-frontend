@@ -1,8 +1,6 @@
 {
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "base-nova",
-  "rsc": false,
-  "tsx": true,
+  "$schema": "https://ui.adrianub.dev/schema.json",
+  "style": "new-york",
   "tailwind": {
     "config": "",
     "css": "src/index.css",
@@ -10,16 +8,12 @@
     "cssVariables": true,
     "prefix": ""
   },
-  "iconLibrary": "lucide",
-  "rtl": false,
   "aliases": {
     "components": "@/components",
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
-    "hooks": "@/hooks"
+    "services": "@/services"
   },
-  "menuColor": "default",
-  "menuAccent": "subtle",
-  "registries": {}
+  "iconLibrary": "lucide"
 }

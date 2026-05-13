@@ -1,8 +1,11 @@
-import { Link } from "react-router";
-import { useForm } from "react-hook-form";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "../../../lib/utils";
+import { useRegisterMutation } from "../../../redux/features/auth/auth.api";
 import { Button } from "../../ui/button";
 import {
   Form,
@@ -39,8 +42,7 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  // const [register] = useRegisterMutation();
-
+  const [register] = useRegisterMutation();
   // const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -53,10 +55,44 @@ export function RegisterForm({
     },
   });
 
+  const { reset } = form
+
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-     
-    console.log(data, "hit..");
-  };
+
+  try {
+    
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+
+    const result = await register(userInfo).unwrap();
+
+    console.log(result, "user");
+
+    toast.success("User created successfully!");
+     reset();
+
+  } catch (error: any) {
+
+    console.log(error, "error");
+
+    const errorSources = error?.data?.errorSources;
+
+    if (errorSources?.length > 0) {
+
+      errorSources.forEach((err: any) => {
+        toast.error(err.message);
+      });
+
+    } else {
+
+      toast.error(error?.data?.message || "Something went wrong");
+
+    }
+  }
+};
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -68,7 +104,6 @@ export function RegisterForm({
       </div>
 
       <div className="grid gap-6">
-        
         {/* Form implement here */}
 
         <Form {...form}>
@@ -147,7 +182,6 @@ export function RegisterForm({
           </form>
         </Form>
 
-
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
             Or continue with
@@ -171,5 +205,3 @@ export function RegisterForm({
     </div>
   );
 }
-
- 

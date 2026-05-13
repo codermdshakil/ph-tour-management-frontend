@@ -5,6 +5,7 @@ import Analytics from "../components/layout/Analytics";
 import AboutPage from "../pages/AboutPage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Verify from "../pages/Verify";
 
 export const router = createBrowserRouter([
   {
@@ -16,10 +17,12 @@ export const router = createBrowserRouter([
         Component: AboutPage,
         path: "about",
       },
-      
+      {
+        Component: Verify,
+        path: "/verify",
+      },
     ],
   },
-
   {
     Component: AdminLayout,
     path: "/admin",

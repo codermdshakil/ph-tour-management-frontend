@@ -1,63 +1,57 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
-// import { useLoginMutation } from "@/redux/features/auth/auth.api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import { toast } from "sonner";
+import { Link } from "react-router";
 import z from "zod";
 import { cn } from "../../../lib/utils";
+import { useLoginMutation } from "../../../redux/features/auth/auth.api";
 import { Button } from "../../ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "../../ui/form";
 import { Input } from "../../ui/input";
+import Password from "../../ui/Password";
 
 const formSchema = z.object({
-  name:z.string(),
-  password:z.string()
-})
+  email: z.string(),
+  password: z.string(),
+});
 
 export function LoginForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  
-  const navigate = useNavigate();
 
-  const form = useForm<z.infer< typeof formSchema >>({
+  const [login] = useLoginMutation()
+
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues:{
-      name:"",
-      password:""
-    }
-  })
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  // const [login] = useLoginMutation();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-
     console.log(data, "hit..");
-    
+
     try {
-
-      const res = await login(data);
-      console.log(res);
-
-    } catch (err) {
-      console.error(err);
-
-      if ((err as any).status === 401) {
-        toast.error("Your account is not verified");
-        navigate("/verify", { state: data.email });
-      }
+      const result = login(data).unwrap();
+      console.log(result, "user result");
+      
+    } catch (error) {
+      console.log(error, "error");
     }
+
+ 
   };
 
   return (
@@ -74,7 +68,7 @@ export function LoginForm({
             {/* email */}
             <FormField
               control={form.control}
-              name="name"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
@@ -98,13 +92,11 @@ export function LoginForm({
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="********"
-                      {...field}
-                      value={field.value || ""}
-                    />
+                    <Password {...field} />
                   </FormControl>
+                  <FormDescription className="sr-only">
+                    This is your public display name.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -138,8 +130,4 @@ export function LoginForm({
     </div>
   );
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function login(_data: FieldValues) {
-  throw new Error("Function not implemented.");
-}
+ 

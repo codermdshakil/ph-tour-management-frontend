@@ -42,7 +42,9 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+
   const [register] = useRegisterMutation();
+
   // const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -55,44 +57,37 @@ export function RegisterForm({
     },
   });
 
-  const { reset } = form
+  const { reset } = form;
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
 
-  try {
-    
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    };
+    try {
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      };
 
-    const result = await register(userInfo).unwrap();
+      const result = await register(userInfo).unwrap();
 
-    console.log(result, "user");
+      console.log(result, "user");
 
-    toast.success("User created successfully!");
-     reset();
+      toast.success("User created successfully!");
+      reset();
 
-  } catch (error: any) {
+    } catch (error: any) {
 
-    console.log(error, "error");
+      const errorSources = error?.data?.errorSources;
 
-    const errorSources = error?.data?.errorSources;
-
-    if (errorSources?.length > 0) {
-
-      errorSources.forEach((err: any) => {
-        toast.error(err.message);
-      });
-
-    } else {
-
-      toast.error(error?.data?.message || "Something went wrong");
-
+      if (errorSources?.length > 0) {
+        errorSources.forEach((err: any) => {
+          toast.error(err.message);
+        });
+      } else {
+        toast.error(error?.data?.message || "Something went wrong");
+      }
     }
-  }
-};
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

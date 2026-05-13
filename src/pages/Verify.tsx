@@ -67,6 +67,7 @@ const Verify = () => {
   // }, [email, navigate]);
 
   const handleConfirmed = async () => {
+    
     const toastId = toast.loading("Sending OTP...");
 
     try {
@@ -83,6 +84,7 @@ const Verify = () => {
   };
 
   const onSubmit = async (data: z.infer<typeof verifyFormSchema>) => {
+
     const toastId = toast.loading("Verifing OTP...");
 
     try {

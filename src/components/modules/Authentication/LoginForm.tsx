@@ -46,12 +46,25 @@ export function LoginForm({
       const res = await login(data).unwrap();
       console.log(res, "user");
 
+      if(res.success){
+        navigate("/")
+      }
+
+
     } catch (error: any) {
 
-
-      if(error.status === 400){
-        navigate("/verify", {state:data.email})
+       if(error.data.message === "Password does not Matched!"){
+        toast.error("Password does not Matched!");
       }
+
+ 
+
+      if(error.data.message === "User is not verified!!"){
+        toast.error("User is not verified!!");
+         navigate("/verify", {state:data.email})
+      }
+
+     
 
       const errorSources = error?.data?.errorSources;
 

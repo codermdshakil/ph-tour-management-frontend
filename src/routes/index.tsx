@@ -17,10 +17,7 @@ export const router = createBrowserRouter([
         Component: AboutPage,
         path: "about",
       },
-      {
-        Component: Verify,
-        path: "/verify",
-      },
+      
     ],
   },
   {
@@ -41,4 +38,8 @@ export const router = createBrowserRouter([
     Component: Register,
     path: "/register",
   },
+  {
+        Component: Verify,
+        path: "/verify",
+      },
 ]);

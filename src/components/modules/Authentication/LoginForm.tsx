@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
@@ -19,7 +19,7 @@ import {
 import { Input } from "../../ui/input";
 import Password from "../../ui/Password";
 
-const formSchema = z.object({
+const loginFormSchema = z.object({
   email: z.string(),
   password: z.string(),
 });
@@ -31,15 +31,15 @@ export function LoginForm({
   const [login] = useLoginMutation();
   const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     
     try {
 

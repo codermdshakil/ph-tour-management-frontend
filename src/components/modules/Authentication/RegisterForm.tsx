@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "../../../lib/utils";
@@ -45,7 +45,7 @@ export function RegisterForm({
 
   const [register] = useRegisterMutation();
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -74,6 +74,7 @@ export function RegisterForm({
 
       toast.success("User created successfully!");
       reset();
+      navigate("/verify")
 
     } catch (error: any) {
 
@@ -86,6 +87,7 @@ export function RegisterForm({
       } else {
         toast.error(error?.data?.message || "Something went wrong");
       }
+
     }
   };
 

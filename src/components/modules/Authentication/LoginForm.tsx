@@ -1,8 +1,8 @@
-
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 import z from "zod";
 import { cn } from "../../../lib/utils";
 import { useLoginMutation } from "../../../redux/features/auth/auth.api";
@@ -28,8 +28,8 @@ export function LoginForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-
-  const [login] = useLoginMutation()
+  const [login] = useLoginMutation();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,19 +39,30 @@ export function LoginForm({
     },
   });
 
-
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data, "hit..");
-
+    
     try {
-      const result = login(data).unwrap();
-      console.log(result, "user result");
-      
-    } catch (error) {
-      console.log(error, "error");
-    }
 
- 
+      const res = await login(data).unwrap();
+      console.log(res, "user");
+
+    } catch (error: any) {
+
+
+      if(error.status === 400){
+        navigate("/verify", {state:data.email})
+      }
+
+      const errorSources = error?.data?.errorSources;
+
+      if (errorSources?.length > 0) {
+        errorSources.forEach((err: any) => {
+          toast.error(err.message);
+        });
+      } else {
+        toast.error(error?.data?.message || "Something went wrong");
+      }
+    }
   };
 
   return (
@@ -130,4 +141,3 @@ export function LoginForm({
     </div>
   );
 }
- 

@@ -2,15 +2,37 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dot } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { Button } from "../components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../components/ui/form";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../components/ui/input-otp";
-import { useSendOtpMutation } from "../redux/features/auth/auth.api";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../components/ui/form";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "../components/ui/input-otp";
+import {
+  useSendOtpMutation,
+  useVerifyOtpMutation,
+} from "../redux/features/auth/auth.api";
+import type { IVerifyOtpPayload } from "../types/auth.type";
 
 const verifyFormSchema = z.object({
   pin: z.string().min(6, {
@@ -18,16 +40,15 @@ const verifyFormSchema = z.object({
   }),
 });
 
-
-
 const Verify = () => {
-
   const location = useLocation();
   const [email] = useState(location.state);
   const [confirmed, setConfirmed] = useState(false);
-  const [sendOtp] = useSendOtpMutation();
+  const navigate = useNavigate()
 
- 
+  const [sendOtp] = useSendOtpMutation();
+  const [verifyOtp] = useVerifyOtpMutation();
+
   const form = useForm<z.infer<typeof verifyFormSchema>>({
     resolver: zodResolver(verifyFormSchema),
     defaultValues: {
@@ -45,33 +66,50 @@ const Verify = () => {
 
   // }, [email, navigate]);
 
- const handleConfirmed = async () => {
-  
-  try {
-   const res = await  sendOtp({email:email}).unwrap();
-   
-   if(res.success){
-    toast.success("OTP Sent! check your Email!")
-   }
+  const handleConfirmed = async () => {
+    const toastId = toast.loading("Sending OTP...");
+
+    try {
+      const res = await sendOtp({ email: email }).unwrap();
+
+      if (res.success) {
+        toast.success("OTP Sent! check your Email!", { id: toastId });
+      }
+
+      setConfirmed(true);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  const onSubmit = async (data: z.infer<typeof verifyFormSchema>) => {
+    const toastId = toast.loading("Verifing OTP...");
+
+    try {
+      
+      const userInfo : IVerifyOtpPayload = {
+        email: email,
+        otp: data.pin,
+      };
+
+      const res = await verifyOtp(userInfo).unwrap();
+
+       if (res.success) {
+        toast.success("OTP Verified Successfully!", { id: toastId });
+        navigate("/login")
+      }
+
+      setConfirmed(true);
+
+    } catch (error) {
+      console.log(error, "error");
+    }
+
     
-    setConfirmed(true);
-    
-  } catch (error) {
-    console.log(error, "error");
-  }
-
- }
-
-  const onSubmit = (data: z.infer<typeof verifyFormSchema>) => {
-    console.log(data, "test");
-    setConfirmed(true)
-    
-  }
-
-
+  };
 
   return (
-      <div className="grid place-content-center h-screen">
+    <div className="grid place-content-center h-screen">
       {confirmed ? (
         <Card>
           <CardHeader>
@@ -85,8 +123,7 @@ const Verify = () => {
               <form
                 id="otp-form"
                 onSubmit={form.handleSubmit(onSubmit)}
-                className=" space-y-6"
-              >
+                className=" space-y-6">
                 <FormField
                   control={form.control}
                   name="pin"
@@ -117,13 +154,9 @@ const Verify = () => {
                         </InputOTP>
                       </FormControl>
                       <FormDescription>
-                        <Button
-                          type="button"
-                          variant="link"
-                           
-                        >
-                          Resent OPT 
-                        </Button> 
+                        <Button type="button" variant="link">
+                          Resent OPT
+                        </Button>
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -141,13 +174,15 @@ const Verify = () => {
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl">Confirm to Verify email address</CardTitle>
+            <CardTitle className="text-xl">
+              Confirm to Verify email address
+            </CardTitle>
             <CardDescription className="text-center">
               We will send you an OTP at <br /> {email}
             </CardDescription>
           </CardHeader>
           <CardFooter className="flex justify-end">
-            <Button  onClick={handleConfirmed} className="w-75">
+            <Button onClick={handleConfirmed} className="w-75">
               Confirm
             </Button>
           </CardFooter>

@@ -1,5 +1,5 @@
 import type { IResponse } from "../../../types";
-import type { ILoginPayload, IRegisterPayload, ISentOtpPayload, IUserLogin, IUserRegister } from "../../../types/auth.type";
+import type { ILoginPayload, IRegisterPayload, ISentOtpPayload, IUserLogin, IUserRegister, IVerifyOtpPayload } from "../../../types/auth.type";
 import { baseApi } from "../../baseApi";
 
 
@@ -30,9 +30,16 @@ export const authApi = baseApi.injectEndpoints({
         data:userInfo
       })
     }),
+    verifyOtp: builder.mutation<IResponse<null>, IVerifyOtpPayload>({
+      query:(userInfo) => ({
+        url:"/otp/verify",
+        method:"POST",
+        data:userInfo
+      })
+    }),
   
 
    })
 });
 
-export const {useRegisterMutation, useLoginMutation, useSendOtpMutation} = authApi
+export const {useRegisterMutation, useLoginMutation, useSendOtpMutation , useVerifyOtpMutation} = authApi

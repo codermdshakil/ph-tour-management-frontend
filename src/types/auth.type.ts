@@ -13,6 +13,10 @@ export interface ILoginPayload{
 export interface ISentOtpPayload {
   email:string;
 }
+export interface IVerifyOtpPayload {
+  email: string
+  otp: string
+}
 
 export interface Auth {
   provider: string

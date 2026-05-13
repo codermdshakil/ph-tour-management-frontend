@@ -74,7 +74,7 @@ export function RegisterForm({
 
       toast.success("User created successfully!");
       reset();
-      navigate("/verify")
+      navigate("/verify", {state:data.email})
 
     } catch (error: any) {
 

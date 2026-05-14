@@ -1,6 +1,7 @@
 
 import { Link } from "react-router";
 import Logo from "../../assets/Icons/Logo";
+import { useUserInfoQuery } from "../../redux/features/auth/auth.api";
 import { Button } from "../ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "../ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -13,6 +14,10 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
+
+  const {data} =  useUserInfoQuery(undefined)
+  console.log(data, "from navber");
+
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">

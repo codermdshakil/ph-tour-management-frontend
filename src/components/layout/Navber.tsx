@@ -1,21 +1,38 @@
-
 import { Link } from "react-router";
+import { toast } from "sonner";
 import Logo from "../../assets/Icons/Logo";
-import { useUserInfoQuery } from "../../redux/features/auth/auth.api";
+import {
+  authApi,
+  useLogOutMutation,
+  useUserInfoQuery,
+} from "../../redux/features/auth/auth.api";
+import { useAppDispatch } from "../../redux/hooks";
 import { Button } from "../ui/button";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "../ui/navigation-menu";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+} from "../ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ModeToggle } from "./ModeToggle";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home"},
+  { href: "/", label: "Home" },
   { href: "/about", label: "About" },
 ];
 
 export default function Navbar() {
+  const { data } = useUserInfoQuery(undefined);
+  const dispatch = useAppDispatch();
+  const [logOut] = useLogOutMutation();
 
-  const {data} =  useUserInfoQuery(undefined)
+  const handleLogOut = async () => {
+    await logOut(undefined);
+    dispatch(authApi.util.resetApiState());
+    toast.success("Logout Successfully!")
+  };
+
   console.log(data, "from navber");
 
   return (
@@ -29,8 +46,7 @@ export default function Navbar() {
               <Button
                 className="group size-8 md:hidden"
                 variant="ghost"
-                size="icon"
-              >
+                size="icon">
                 <svg
                   className="pointer-events-none"
                   width={16}
@@ -41,8 +57,7 @@ export default function Navbar() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                  xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M4 12L20 12"
                     className="origin-center -translate-y-1.75 transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-315"
@@ -63,11 +78,10 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                     <NavigationMenuItem key={index}>
-                     
-                      {/* it don't refresh */}
-                      <Link to={link.href} >{link.label}</Link>
-                  </NavigationMenuItem>
+                      <NavigationMenuItem key={index}>
+                        {/* it don't refresh */}
+                        <Link to={link.href}>{link.label}</Link>
+                      </NavigationMenuItem>
                     </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
@@ -84,9 +98,8 @@ export default function Navbar() {
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
-                     
-                      {/* it don't refresh */}
-                      <Link to={link.href} >{link.label}</Link>
+                    {/* it don't refresh */}
+                    <Link to={link.href}>{link.label}</Link>
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
@@ -95,11 +108,22 @@ export default function Navbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <ModeToggle/>
-          
-          <Button  className="text-sm">
-            <Link to={"/login"} >Login</Link>
-          </Button>
+          <ModeToggle />
+
+          {data?.data?.email && (
+            <Button
+              onClick={handleLogOut}
+              variant="outline"
+              className="text-sm">
+              Logout
+            </Button>
+          )}
+
+          {!data?.data?.email && (
+            <Button className="text-sm">
+              <Link to={"/login"}>Login</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

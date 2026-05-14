@@ -48,6 +48,7 @@ export function LoginForm({
       console.log(res, "user");
 
       if(res.success){
+        toast.success("Logged in successfully!")
         navigate("/")
       }
 

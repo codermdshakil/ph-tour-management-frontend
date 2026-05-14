@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
+import config from "../../../config";
 import { cn } from "../../../lib/utils";
 import { useLoginMutation } from "../../../redux/features/auth/auth.api";
 import { Button } from "../../ui/button";
@@ -126,6 +127,7 @@ export function LoginForm({
               )}
             />
 
+
             <Button type="submit" className="w-full">
               Login
             </Button>
@@ -138,10 +140,13 @@ export function LoginForm({
           </span>
         </div>
 
+        {/*//* http://localhost:5000/api/v1/auth/google */}
         <Button
+          onClick={() => window.open(`${config.baseUrl}/auth/google`)}
           type="button"
           variant="outline"
-          className="w-full cursor-pointer">
+          className="w-full cursor-pointer"
+        >
           Login with Google
         </Button>
       </div>

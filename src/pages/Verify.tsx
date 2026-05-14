@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dot } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -28,6 +28,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "../components/ui/input-otp";
+import { cn } from "../lib/utils";
 import {
   useSendOtpMutation,
   useVerifyOtpMutation,
@@ -45,7 +46,7 @@ const Verify = () => {
   const [email] = useState(location.state);
   const [confirmed, setConfirmed] = useState(false);
   const navigate = useNavigate()
-
+  const [timer, setTimer] = useState(5);
   const [sendOtp] = useSendOtpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
 
@@ -66,20 +67,35 @@ const Verify = () => {
 
   // }, [email, navigate]);
 
-  const handleConfirmed = async () => {
+  useEffect(() => {
+    if (!email || !confirmed) {
+      return;
+    }
+
+    const timerId = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      console.log("Tick");
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [email, confirmed]);
+
+
     
-    const toastId = toast.loading("Sending OTP...");
+
+  const handleSendOtp = async () => {
+    const toastId = toast.loading("Sending OTP");
 
     try {
       const res = await sendOtp({ email: email }).unwrap();
 
       if (res.success) {
-        toast.success("OTP Sent! check your Email!", { id: toastId });
+        toast.success("OTP Sent", { id: toastId });
+        setConfirmed(true);
+        setTimer(5);
       }
-
-      setConfirmed(true);
-    } catch (error) {
-      console.log(error, "error");
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -109,6 +125,8 @@ const Verify = () => {
 
     
   };
+
+  
 
   return (
     <div className="grid place-content-center h-screen">
@@ -156,9 +174,19 @@ const Verify = () => {
                         </InputOTP>
                       </FormControl>
                       <FormDescription>
-                        <Button type="button" variant="link">
-                          Resent OPT
-                        </Button>
+                        <Button
+                          onClick={handleSendOtp}
+                          type="button"
+                          variant="link"
+                          disabled={timer !== 0}
+                          className={cn("p-0 m-0", {
+                            "cursor-pointer": timer === 0,
+                            "text-gray-500": timer !== 0,
+                          })}
+                        >
+                          Resent OPT:{" "}
+                        </Button>{" "}
+                        {timer}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -184,7 +212,7 @@ const Verify = () => {
             </CardDescription>
           </CardHeader>
           <CardFooter className="flex justify-end">
-            <Button onClick={handleConfirmed} className="w-75">
+            <Button onClick={handleSendOtp} className="w-75">
               Confirm
             </Button>
           </CardFooter>

@@ -1,37 +1,21 @@
 import * as React from "react"
 import { Link } from "react-router"
 import Logo from "../assets/Icons/Logo"
-import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarRail } from "./ui/sidebar"
+import { adminSideBarItems } from "../routes/adminSideBarItems"
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarRail } from "./ui/sidebar"
 
 
 
 // This is sample data.
 const data = {
-  navMain: [
-    {
-      title: "Deshboard",
-      url: "/admin",
-      items: [
-        {
-          title: "Analytics",
-          url: "/admin/analytics",
-        },
-      ],
-    },
-    {
-      title: "User Management",
-      url: "/user",
-      items: [
-        {
-          title: "Bookings",
-          url: "/user/bookings",
-        },
-      ],
-    },
-  ]
+  navMain: adminSideBarItems
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+
+  console.log(data, "data");
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -46,11 +30,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <Link to={item.url} className="font-medium">
-                    {item.title}
-                  </Link>
-                </SidebarMenuButton>
+                <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
                 {item.items?.length ? (
                   <SidebarMenuSub>
                     {item.items.map((item) => (

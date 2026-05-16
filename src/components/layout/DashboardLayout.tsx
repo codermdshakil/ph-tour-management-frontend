@@ -1,14 +1,11 @@
 import { Outlet } from "react-router";
-import { adminSideBarItems } from "../../routes/adminSideBarItems";
-import { generateRoute } from "../../utils/generateRoutes";
+
 import { AppSidebar } from "../app-sidebar";
 import { Separator } from "../ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 
 const DashboardLayout = () => {
 
-  const result = generateRoute(adminSideBarItems);
-  console.log(result, "hit.");
 
   return (
     <SidebarProvider>

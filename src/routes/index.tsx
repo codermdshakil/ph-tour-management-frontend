@@ -4,10 +4,10 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import AboutPage from "../pages/AboutPage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Bookings from "../pages/User/Bookings";
 import Verify from "../pages/Verify";
 import { generateRoute } from "../utils/generateRoutes";
-import { adminSideBarItems } from "./adminSideBarItems";
+import { adminSidebarItems } from "./adminSidebarItems";
+import { userSidebarItems } from "./userSidebarItems";
 
 export const router = createBrowserRouter([
   {
@@ -24,17 +24,12 @@ export const router = createBrowserRouter([
   {
     Component: DashboardLayout,
     path: "/admin",
-    children: [...generateRoute(adminSideBarItems)]
+    children: [...generateRoute(adminSidebarItems)]
   },
   {
     Component: DashboardLayout,
     path: "/user",
-    children: [
-      {
-        path: "bookings",
-        Component: Bookings,
-      },
-    ],
+    children: [...generateRoute(userSidebarItems)],
   },
   {
     Component: Login,

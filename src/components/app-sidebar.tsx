@@ -1,27 +1,41 @@
-import * as React from "react"
-import { Link } from "react-router"
-import Logo from "../assets/Icons/Logo"
-import { adminSideBarItems } from "../routes/adminSideBarItems"
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarRail } from "./ui/sidebar"
-
-
-
-// This is sample data.
-const data = {
-  navMain: adminSideBarItems
-}
+import * as React from "react";
+import { Link } from "react-router";
+import Logo from "../assets/Icons/Logo";
+import { useUserInfoQuery } from "../redux/features/auth/auth.api";
+import { getSidebarItems } from "../utils/getSidebarItems";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarRail,
+} from "./ui/sidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  
+  const {data:userData} = useUserInfoQuery(undefined);
+  console.log(userData);
 
-
-  console.log(data, "data");
+  
+  // This is sample data.
+  const data = {
+    navMain: getSidebarItems(userData?.data?.role),
+  };
 
   return (
     <Sidebar {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-             <Logo/>
+            <Link to={"/"}>
+              <Logo />
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -35,7 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuSub>
                     {item.items.map((item) => (
                       <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild >
+                        <SidebarMenuSubButton asChild>
                           <Link to={item.url}>{item.title}</Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
@@ -49,5 +63,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

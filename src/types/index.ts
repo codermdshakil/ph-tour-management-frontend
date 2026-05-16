@@ -16,3 +16,5 @@ export interface ISidebarItemsArray  {
   title: string;
   items: ISidebarItem[];
 };
+
+export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";

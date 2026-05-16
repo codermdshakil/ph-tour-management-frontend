@@ -45,7 +45,6 @@ export function LoginForm({
     try {
 
       const res = await login(data).unwrap();
-      console.log(res, "user");
 
       if(res.success){
         toast.success("Logged in successfully!")

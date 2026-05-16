@@ -4,7 +4,7 @@ import Analytics from "../pages/Admin/Analytics";
 import Habijabi from "../pages/Admin/Habijabi";
 import type { ISidebarItemsArray } from "../types";
 
-export const adminSideBarItems : ISidebarItemsArray[] = [
+export const adminSidebarItems : ISidebarItemsArray[] = [
   {
     title: "Deshboard",
     items: [

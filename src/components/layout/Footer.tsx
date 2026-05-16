@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import Logo from "../../assets/Icons/Logo";
 
 const Footer = () => {
@@ -8,7 +9,7 @@ const Footer = () => {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div>
               <div>
-                 <Logo/>
+                 <Link to={"/"}><Logo/></Link>
               </div>
 
               <p className="mt-4 max-w-xs text-foreground/80">

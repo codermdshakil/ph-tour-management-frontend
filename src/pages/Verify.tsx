@@ -74,7 +74,6 @@ const Verify = () => {
 
     const timerId = setInterval(() => {
       setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-      console.log("Tick");
     }, 1000);
 
     return () => clearInterval(timerId);

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import App from "../App";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import AboutPage from "../pages/AboutPage";
@@ -24,12 +24,12 @@ export const router = createBrowserRouter([
   {
     Component: DashboardLayout,
     path: "/admin",
-    children: [...generateRoute(adminSidebarItems)]
+    children:  [ {index:true, element:<Navigate to={"/admin/analytics"} />},...generateRoute(adminSidebarItems)]
   },
   {
     Component: DashboardLayout,
     path: "/user",
-    children: [...generateRoute(userSidebarItems)],
+    children: [{index:true, element:<Navigate to={"/user/bookings"} />},...generateRoute(userSidebarItems)],
   },
   {
     Component: Login,

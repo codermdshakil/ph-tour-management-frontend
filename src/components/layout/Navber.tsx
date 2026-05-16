@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { toast } from "sonner";
 import Logo from "../../assets/Icons/Logo";
+import { role } from "../../constants/role";
 import {
   authApi,
   useLogOutMutation,
@@ -11,6 +12,7 @@ import { Button } from "../ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
+  NavigationMenuLink,
   NavigationMenuList,
 } from "../ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -18,8 +20,11 @@ import { ModeToggle } from "./ModeToggle";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Home", role: "PUBLIC" },
+  { href: "/about", label: "About", role: "PUBLIC" },
+  { href: "/admin", label: "Deshboard", role: role.admin },
+  { href: "/admin", label: "Deshboard", role: role.superAdmin },
+  { href: "/user", label: "Deshboard", role: role.user },
 ];
 
 export default function Navbar() {
@@ -27,12 +32,11 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const [logOut] = useLogOutMutation();
 
-  const handleLogOut = async () => {
+ const handleLogOut = async () => {
     await logOut(undefined);
     dispatch(authApi.util.resetApiState());
-    toast.success("Logout Successfully!")
+    toast.success("Logout Successfully!");
   };
-
 
   return (
     <header className="border-b">
@@ -76,12 +80,24 @@ export default function Navbar() {
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuItem key={index}>
-                        {/* it don't refresh */}
-                        <Link to={link.href}>{link.label}</Link>
-                      </NavigationMenuItem>
-                    </NavigationMenuItem>
+                    <>
+                      {link.role === "PUBLICK" && (
+                        <NavigationMenuItem key={index} className="w-full">
+                          <NavigationMenuItem key={index}>
+                            {/* it don't refresh */}
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuItem>
+                        </NavigationMenuItem>
+                      )}
+                      {link.role === data?.data?.role && (
+                        <NavigationMenuItem key={index} className="w-full">
+                          <NavigationMenuItem key={index}>
+                            {/* it don't refresh */}
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuItem>
+                        </NavigationMenuItem>
+                      )}
+                    </>
                   ))}
                 </NavigationMenuList>
               </NavigationMenu>
@@ -89,15 +105,37 @@ export default function Navbar() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-               <Link to={"/"}><Logo/></Link>
+            <Link to={"/"}>
+              <Logo />
+            </Link>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
-                    {/* it don't refresh */}
-                    <Link to={link.href}>{link.label}</Link>
-                  </NavigationMenuItem>
+
+                  <>
+                    {link.role === "PUBLIC" && (
+                      <NavigationMenuItem key={index}>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                    {link.role === data?.data?.role && (
+                      <NavigationMenuItem key={index}>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                  </>
+                
                 ))}
               </NavigationMenuList>
             </NavigationMenu>

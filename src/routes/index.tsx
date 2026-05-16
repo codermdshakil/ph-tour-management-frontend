@@ -4,6 +4,7 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import { role } from "../constants/role";
 import AboutPage from "../pages/AboutPage";
 import Login from "../pages/Login";
+import NotFound from "../pages/NotFound";
 import Register from "../pages/Register";
 import Unauthorized from "../pages/Unauthorized";
 import Verify from "../pages/Verify";
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         Component: withAuth(AboutPage),
         path: "about",
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },

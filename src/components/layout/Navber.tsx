@@ -32,7 +32,7 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const [logOut] = useLogOutMutation();
 
- const handleLogOut = async () => {
+  const handleLogOut = async () => {
     await logOut(undefined);
     dispatch(authApi.util.resetApiState());
     toast.success("Logout Successfully!");
@@ -81,20 +81,22 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <>
-                      {link.role === "PUBLICK" && (
-                        <NavigationMenuItem key={index} className="w-full">
-                          <NavigationMenuItem key={index}>
-                            {/* it don't refresh */}
+                      {link.role === "PUBLIC" && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            asChild
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium">
                             <Link to={link.href}>{link.label}</Link>
-                          </NavigationMenuItem>
+                          </NavigationMenuLink>
                         </NavigationMenuItem>
                       )}
                       {link.role === data?.data?.role && (
-                        <NavigationMenuItem key={index} className="w-full">
-                          <NavigationMenuItem key={index}>
-                            {/* it don't refresh */}
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            asChild
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium">
                             <Link to={link.href}>{link.label}</Link>
-                          </NavigationMenuItem>
+                          </NavigationMenuLink>
                         </NavigationMenuItem>
                       )}
                     </>
@@ -103,6 +105,7 @@ export default function Navbar() {
               </NavigationMenu>
             </PopoverContent>
           </Popover>
+
           {/* Main nav */}
           <div className="flex items-center gap-6">
             <Link to={"/"}>
@@ -112,14 +115,12 @@ export default function Navbar() {
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
-
                   <>
                     {link.role === "PUBLIC" && (
                       <NavigationMenuItem key={index}>
                         <NavigationMenuLink
                           asChild
-                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                        >
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium">
                           <Link to={link.href}>{link.label}</Link>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
@@ -128,14 +129,12 @@ export default function Navbar() {
                       <NavigationMenuItem key={index}>
                         <NavigationMenuLink
                           asChild
-                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                        >
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium">
                           <Link to={link.href}>{link.label}</Link>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
                     )}
                   </>
-                
                 ))}
               </NavigationMenuList>
             </NavigationMenu>

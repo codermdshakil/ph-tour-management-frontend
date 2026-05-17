@@ -44,4 +44,15 @@ export interface IUserLogin {
   user: IUserRegister
 }
 
- 
+// Tour type
+export interface ITourTypePayload{
+  name:string,
+}
+
+// Tour Type Response
+export interface ITourTypeResponse {
+  name: string
+  _id: string
+  createdAt: string
+  updatedAt: string
+}

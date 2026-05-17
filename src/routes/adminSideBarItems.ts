@@ -1,10 +1,10 @@
 import { lazy } from "react";
-import Habijabi from "../pages/Admin/Habijabi";
+import AddTourType from "../pages/Admin/AddTourType";
 import type { ISidebarItemsArray } from "../types";
 
 const Analytics = lazy(() => import("../pages/Admin/Analytics"))
 const AddTour = lazy(() => import("../pages/Admin/AddTour"))
-const AddTourType = lazy(() => import("../pages/Admin/AddTourType"))
+// const AddTourType = lazy(() => import("../pages/Admin/AddTourType"))
 
 export const adminSidebarItems : ISidebarItemsArray[] = [
   {
@@ -30,11 +30,7 @@ export const adminSidebarItems : ISidebarItemsArray[] = [
         url: "/admin/add-tour-type",
         Component:AddTourType
       },
-      {
-        title: "habojabi",
-        url: "/admin/habijabi",
-        Component:Habijabi
-      },
+      
     ],
   },
 ];

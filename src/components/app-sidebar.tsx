@@ -20,7 +20,6 @@ import {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   
   const {data:userData} = useUserInfoQuery(undefined);
-  console.log(userData);
 
   
   // This is sample data.

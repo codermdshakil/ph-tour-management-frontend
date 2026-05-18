@@ -13,15 +13,16 @@ import {
 
 
 interface IProps {
-  children:ReactNode
+  children:ReactNode,
+  onConfirm: () => void;
 }
 
 
-export function DeleteConfirmation({children}: IProps) {
+export function DeleteConfirmation({children, onConfirm}: IProps) {
 
-  
+
   const handleConfirm = () => {
-    console.log("handle confirm");
+    onConfirm(); // call a function  that delete a item
   }
 
   return (

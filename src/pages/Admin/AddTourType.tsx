@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { DeleteConfirmation } from "../../components/DeleteConfirmation";
 import { AddTourTypeModal } from "../../components/modules/Admin/TourType/AddTourTypeModal";
 import { Button } from "../../components/ui/button";
@@ -10,12 +12,37 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import { useGetTourTypesQuery } from "../../redux/features/tour/tour.api";
+import { useGetTourTypesQuery, useRemoveTourTypeMutation } from "../../redux/features/tour/tour.api";
 import Loading from "../Loading";
 
 const AddTourType = () => {
   const { data, isLoading } = useGetTourTypesQuery(undefined);
+  const [removeTourType] = useRemoveTourTypeMutation();
  
+
+  const handleRemoveTourType = async (tourId: string) => {
+  try {
+    const res = await removeTourType(tourId).unwrap();
+
+    if (res.success) {
+      toast.success("Successfully Deleted a Tour Type!");
+    }
+
+    console.log(res, "hit.");
+  } catch (error: any) {
+    console.log(error);
+
+    const errorSources = error?.data?.errorSources;
+
+    if (errorSources?.length > 0) {
+      errorSources.forEach((err: any) => {
+        toast.error(err.message);
+      });
+    } else {
+      toast.error(error?.data?.message || "Something went wrong");
+    }
+  }
+};
 
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
@@ -37,7 +64,7 @@ const AddTourType = () => {
             <TableBody className="">
               {[...(data?.data || [])]
                 .reverse()
-                .map((item: { name: string }) => (
+                .map((item: {_id:string,name: string }) => (
                   <TableRow>
                     <TableCell className="font-medium  w-full ">
                       {item.name}
@@ -46,7 +73,7 @@ const AddTourType = () => {
                       {/* <Button size="icon-sm">
                     <Trash2 />
                   </Button> */}
-                      <DeleteConfirmation>
+                      <DeleteConfirmation onConfirm={() => handleRemoveTourType(item._id)} >
                         <Button  size="icon-sm">
                           <Trash2 />
                         </Button>

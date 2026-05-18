@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import { DeleteConfirmation } from "../../components/DeleteConfirmation";
 import { AddTourTypeModal } from "../../components/modules/Admin/TourType/AddTourTypeModal";
 import { Button } from "../../components/ui/button";
 import {
@@ -14,36 +15,48 @@ import Loading from "../Loading";
 
 const AddTourType = () => {
   const { data, isLoading } = useGetTourTypesQuery(undefined);
+ 
 
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
       <div className="flex justify-between my-16">
         <h2>Tour Types</h2>
-      
-        <AddTourTypeModal/>
+
+        <AddTourTypeModal />
       </div>
       <div className="border-2 border-muted p-3 rounded-md">
-       {isLoading && <Loading/>}
-       {data && !isLoading && <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-25 font-medium">Name</TableHead>
-              <TableHead className="font-medium text-right">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="" >
-            {[...data?.data || []].reverse().map((item: { name: string }) => (
-              <TableRow >
-                <TableCell className="font-medium  w-full ">{item.name}</TableCell>
-                <TableCell>
-                  <Button size="icon-sm">
-                    <Trash2 />
-                  </Button>
-                </TableCell>
+        {isLoading && <Loading />}
+        {data && !isLoading && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-25 font-medium">Name</TableHead>
+                <TableHead className="font-medium text-right">Action</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>}
+            </TableHeader>
+            <TableBody className="">
+              {[...(data?.data || [])]
+                .reverse()
+                .map((item: { name: string }) => (
+                  <TableRow>
+                    <TableCell className="font-medium  w-full ">
+                      {item.name}
+                    </TableCell>
+                    <TableCell>
+                      {/* <Button size="icon-sm">
+                    <Trash2 />
+                  </Button> */}
+                      <DeleteConfirmation>
+                        <Button  size="icon-sm">
+                          <Trash2 />
+                        </Button>
+                      </DeleteConfirmation>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );

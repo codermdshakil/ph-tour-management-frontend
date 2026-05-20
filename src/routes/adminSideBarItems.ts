@@ -36,6 +36,11 @@ export const adminSidebarItems : ISidebarItemsArray[] = [
         url: "/admin/add-tour-type",
         Component:AddTourType
       },
+      {
+        title: "Add Tour",
+        url: "/admin/add-tour",
+        Component:AddTour
+      },
       
     ],
   },

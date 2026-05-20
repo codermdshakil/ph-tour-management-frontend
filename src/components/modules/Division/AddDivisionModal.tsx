@@ -29,7 +29,7 @@ export function AddDivisionModal() {
     formData.append("data", JSON.stringify(data));
     formData.append("file", image as File);
 
-    console.log(data, "hit");
+    console.log(formData, "hit");
 
     // console.log(formData.get("data"));
     // console.log(formData.get("file"));

@@ -50,6 +50,7 @@ export function AddDivisionModal() {
       const res = await addDivision(formData).unwrap();
 
       if (res.success) {
+        setOpen(false)
         toast.success("Division created successfully");
         reset()
       }

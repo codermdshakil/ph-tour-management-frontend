@@ -110,19 +110,7 @@ export default function SingleImageUploader({onChange}) {
         </div>
       )}
 
-      <p
-        aria-live="polite"
-        className="mt-2 text-center text-muted-foreground text-xs"
-        role="region"
-      >
-        Single image uploader w/ max size ∙{" "}
-        <a
-          className="underline hover:text-foreground"
-          href="https://github.com/cosscom/coss/blob/main/apps/origin/docs/use-file-upload.md"
-        >
-          API
-        </a>
-      </p>
+       
     </div>
   );
 }

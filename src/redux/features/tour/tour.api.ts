@@ -40,7 +40,7 @@ export const tourApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags:["TOUR"],
-      transformResponse: (response) => response.data // get specific data from backend response
+      transformResponse: (response) => response.data.data // get specific data from backend response
     }),
 
 

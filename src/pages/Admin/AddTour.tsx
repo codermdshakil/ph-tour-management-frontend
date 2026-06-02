@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Button } from "../../components/ui/button";
+import { Calendar } from "../../components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -9,6 +10,11 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -21,16 +27,20 @@ import { useGetAllDivisionQuery } from "../../redux/features/division/division.a
 import { useGetTourTypesQuery } from "../../redux/features/tour/tour.api";
 
 const AddTour = () => {
-  const { data: divisionData, isLoading: divisionLoading } = useGetAllDivisionQuery(undefined);
-  const { data: tourTypeData, isLoading: tourTypeLoading }  = useGetTourTypesQuery(undefined);
+  const { data: divisionData, isLoading: divisionLoading } =
+    useGetAllDivisionQuery(undefined);
+  const { data: tourTypeData, isLoading: tourTypeLoading } =
+    useGetTourTypesQuery(undefined);
 
-  const divisionOptions = divisionData?.map((item: { _id: string; name: string }) => ({
+  const divisionOptions = divisionData?.map(
+    (item: { _id: string; name: string }) => ({
       value: item._id,
       label: item.name,
     }),
   );
 
-  const tourTypeOptions = tourTypeData?.map((item: { _id: string; name: string }) => ({
+  const tourTypeOptions = tourTypeData?.map(
+    (item: { _id: string; name: string }) => ({
       value: item._id,
       label: item.name,
     }),
@@ -41,6 +51,8 @@ const AddTour = () => {
       title: "",
       division: "",
       tourType: "",
+      startDate:undefined,
+      endDate:undefined,
       description: "",
     },
   });
@@ -77,6 +89,7 @@ const AddTour = () => {
                 </FormItem>
               )}
             />
+
             <div className="grid grid-cols-2 gap-4">
               {/* division */}
               <FormField
@@ -89,19 +102,18 @@ const AddTour = () => {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={divisionLoading}
-                        >
+                        disabled={divisionLoading}>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select a Division" />
                         </SelectTrigger>
                         <SelectContent>
-                          { divisionOptions?.map(
-                              (item: { label: string; value: string }) => (
-                                <SelectItem key={item.label}  value={item.value}>
-                                  {item.label}
-                                </SelectItem>
-                              ),
-                            )}
+                          {divisionOptions?.map(
+                            (item: { label: string; value: string }) => (
+                              <SelectItem key={item.label} value={item.value}>
+                                {item.label}
+                              </SelectItem>
+                            ),
+                          )}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -109,8 +121,8 @@ const AddTour = () => {
                   </FormItem>
                 )}
               />
-              {/* tourType */}
 
+              {/* tourType */}
               <FormField
                 control={form.control}
                 name="tourType"
@@ -121,22 +133,88 @@ const AddTour = () => {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={tourTypeLoading}
-                        >
+                        disabled={tourTypeLoading}>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select a TourType" />
                         </SelectTrigger>
                         <SelectContent>
-                          { tourTypeOptions?.map(
-                              (item: { label: string; value: string }) => (
-                                <SelectItem key={item.label} value={item.value}>
-                                  {item.label}
-                                </SelectItem>
-                              ),
-                            )}
+                          {tourTypeOptions?.map(
+                            (item: { label: string; value: string }) => (
+                              <SelectItem key={item.label} value={item.value}>
+                                {item.label}
+                              </SelectItem>
+                            ),
+                          )}
                         </SelectContent>
                       </Select>
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {/* date picker */}
+              <FormField
+                control={form.control}
+                name="startDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Start Date</FormLabel>
+
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="justify-start font-normal">
+                          {field.value
+                            ? new Date(field.value).toLocaleDateString()
+                            : "Select Start Date"}
+                        </Button>
+                      </PopoverTrigger>
+
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                        />
+                      </PopoverContent>
+                    </Popover>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>End Date</FormLabel>
+
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="justify-start font-normal">
+                          {field.value
+                            ? new Date(field.value).toLocaleDateString()
+                            : "Select End Date"}
+                        </Button>
+                      </PopoverTrigger>
+
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                        />
+                      </PopoverContent>
+                    </Popover>
+
                     <FormMessage />
                   </FormItem>
                 )}

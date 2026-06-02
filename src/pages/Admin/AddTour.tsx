@@ -1,3 +1,4 @@
+import { formatISO } from "date-fns";
 import { useForm } from "react-hook-form";
 import { Button } from "../../components/ui/button";
 import { Calendar } from "../../components/ui/calendar";
@@ -51,15 +52,21 @@ const AddTour = () => {
       title: "",
       division: "",
       tourType: "",
-      startDate:undefined,
-      endDate:undefined,
+      startDate: "",
+      endDate: "",
       description: "",
     },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    console.log(data, "clicked..");
+    const tourData = {
+      ...data,
+      startDate: formatISO(data.startDate),
+      endDate: formatISO(data.endDate),
+    };
+
+    console.log(tourData, "clicked..");
   };
 
   return (
@@ -177,8 +184,14 @@ const AddTour = () => {
                       <PopoverContent className="w-auto p-0">
                         <Calendar
                           mode="single"
-                          selected={field.value}
+                          selected={new Date(field.value)}
                           onSelect={field.onChange}
+                          disabled={(date) =>
+                            date <
+                            new Date(
+                              new Date().setDate(new Date().getDate() - 1),
+                            )
+                          }
                         />
                       </PopoverContent>
                     </Popover>
@@ -209,8 +222,14 @@ const AddTour = () => {
                       <PopoverContent className="w-auto p-0">
                         <Calendar
                           mode="single"
-                          selected={field.value}
+                          selected={new Date(field.value)}
                           onSelect={field.onChange}
+                          disabled={(date) =>
+                            date <
+                            new Date(
+                              new Date().setDate(new Date().getDate() - 1),
+                            )
+                          }
                         />
                       </PopoverContent>
                     </Popover>

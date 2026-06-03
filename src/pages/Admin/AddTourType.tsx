@@ -28,7 +28,6 @@ const AddTourType = () => {
       toast.success("Successfully Deleted a Tour Type!");
     }
 
-    console.log(res, "hit.");
   } catch (error: any) {
     console.log(error);
 
@@ -62,7 +61,7 @@ const AddTourType = () => {
               </TableRow>
             </TableHeader>
             <TableBody className="">
-              {[...(data?.data || [])]
+              {[...(data || [])]
                 .reverse()
                 .map((item: {_id:string,name: string }) => (
                   <TableRow>

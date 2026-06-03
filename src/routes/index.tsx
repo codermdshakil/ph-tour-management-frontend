@@ -3,10 +3,12 @@ import App from "../App";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import { role } from "../constants/role";
 import AboutPage from "../pages/AboutPage";
+import Booking from "../pages/Booking";
 import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
 import Register from "../pages/Register";
+import TourDetails from "../pages/TourDetails";
 import Tours from "../pages/Tours";
 import Unauthorized from "../pages/Unauthorized";
 import Verify from "../pages/Verify";
@@ -23,8 +25,8 @@ export const router = createBrowserRouter([
     path: "/",
     children: [
       {
-        Component:HomePage,
-        index:true
+        Component: HomePage,
+        index: true,
       },
       {
         Component: withAuth(AboutPage),
@@ -35,6 +37,14 @@ export const router = createBrowserRouter([
         path: "tours",
       },
       {
+        Component: TourDetails,
+        path: "tours/:id",
+      },
+      {
+         Component: withAuth(Booking),
+        path: "booking/:id",
+      },
+      {
         path: "*",
         element: <NotFound />,
       },
@@ -43,12 +53,18 @@ export const router = createBrowserRouter([
   {
     Component: withAuth(DashboardLayout, role.superAdmin as TRole),
     path: "/admin",
-    children:  [ {index:true, element:<Navigate to={"/admin/analytics"} />},...generateRoute(adminSidebarItems)]
+    children: [
+      { index: true, element: <Navigate to={"/admin/analytics"} /> },
+      ...generateRoute(adminSidebarItems),
+    ],
   },
   {
-    Component:  withAuth(DashboardLayout, role.user as TRole),
+    Component: withAuth(DashboardLayout, role.user as TRole),
     path: "/user",
-    children: [{index:true, element:<Navigate to={"/user/bookings"} />},...generateRoute(userSidebarItems)],
+    children: [
+      { index: true, element: <Navigate to={"/user/bookings"} /> },
+      ...generateRoute(userSidebarItems),
+    ],
   },
   {
     Component: Login,

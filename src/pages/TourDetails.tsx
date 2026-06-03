@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router";
 import { Button } from "../components/ui/button";
 import { useGetDivisionsQuery } from "../redux/features/division/division.api";
 import { useGetAllToursQuery } from "../redux/features/tour/tour.api";
+import Loading from "./Loading";
 
 export default function TourDetails() {
   const { id } = useParams();
@@ -23,9 +24,9 @@ export default function TourDetails() {
 
   const tourData = data?.[0];
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
   return (
     <div className="container mx-auto p-6">
@@ -48,6 +49,7 @@ export default function TourDetails() {
 
       {/* Images */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+         {isLoading && <Loading/>}
         {tourData?.images?.map((image, index) => (
           <img
             key={index}

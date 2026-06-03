@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router";
 import TourFilters from "../components/modules/Tours/TourFilter";
 import { Button } from "../components/ui/button";
 import { useGetAllToursQuery } from "../redux/features/tour/tour.api";
+import Loading from "./Loading";
 
 
 
@@ -14,20 +15,22 @@ export default function Tours() {
   const tourType = searchParams.get("tourType") || undefined;
 
 
- const {data} = useGetAllToursQuery({division, tourType});
+ const {data, isLoading} = useGetAllToursQuery({division, tourType});
   
   console.log(data, "hit");
 
   return (
     <div className="container mx-auto px-5 py-8 grid grid-cols-12 gap-5">
-       <TourFilters/>
-      <div className="col-span-9 w-full">
+       <div className="lg:col-span-3 md:col-span-5 col-span-12">
+        <TourFilters/>
+       </div>
+      <div className="lg:col-span-9 md:col-span-7 col-span-12 w-full">
+        {isLoading && <Loading/>}
+
         {data?.map((item) => (
-          <div
-            key={item.slug}
-            className="border border-muted rounded-lg shadow-md overflow-hidden mb-6 flex"
+          <div  key={item.slug} className="border border-muted rounded-lg shadow-md overflow-hidden mb-6 lg:flex"
           >
-            <div className="w-2/5 bg-red-500 shrink-0">
+            <div className="lg:w-2/5 w-full bg-red-500 shrink-0">
               <img
                 src={item.images[0]}
                 alt={item.title}

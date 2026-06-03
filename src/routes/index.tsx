@@ -7,6 +7,7 @@ import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
 import Register from "../pages/Register";
+import Tours from "../pages/Tours";
 import Unauthorized from "../pages/Unauthorized";
 import Verify from "../pages/Verify";
 import type { TRole } from "../types";
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
       {
         Component: withAuth(AboutPage),
         path: "about",
+      },
+      {
+        Component: withAuth(Tours),
+        path: "tours",
       },
       {
         path: "*",

@@ -22,6 +22,7 @@ import { ModeToggle } from "./ModeToggle";
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
+  { href: "/tours", label: "Tours", role: "PUBLIC" },
   { href: "/admin", label: "Deshboard", role: role.admin },
   { href: "/admin", label: "Deshboard", role: role.superAdmin },
   { href: "/user", label: "Deshboard", role: role.user },

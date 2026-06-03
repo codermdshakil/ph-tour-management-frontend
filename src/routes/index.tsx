@@ -3,6 +3,7 @@ import App from "../App";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import { role } from "../constants/role";
 import AboutPage from "../pages/AboutPage";
+import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
 import Register from "../pages/Register";
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
     Component: App,
     path: "/",
     children: [
+      {
+        Component:HomePage,
+        index:true
+      },
       {
         Component: withAuth(AboutPage),
         path: "about",

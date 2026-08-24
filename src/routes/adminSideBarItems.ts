@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import AddDivision from "../pages/Admin/AddDivision";
 import AddTourType from "../pages/Admin/AddTourType";
+import HomePage from "../pages/HomePage";
 import type { ISidebarItemsArray } from "../types";
 
 const Analytics = lazy(() => import("../pages/Admin/Analytics"))
@@ -8,6 +9,18 @@ const AddTour = lazy(() => import("../pages/Admin/AddTour"))
 // const AddTourType = lazy(() => import("../pages/Admin/AddTourType"))
 
 export const adminSidebarItems : ISidebarItemsArray[] = [
+
+  {
+    title: "Navigation",
+    items: [
+      {
+        title: "Home",
+        url: "/",
+        Component: HomePage,
+      },
+    ],
+  },
+
   {
     title: "Deshboard",
     items: [

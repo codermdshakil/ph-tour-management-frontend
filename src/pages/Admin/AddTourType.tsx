@@ -64,7 +64,7 @@ const AddTourType = () => {
               {[...(data || [])]
                 .reverse()
                 .map((item: {_id:string,name: string }) => (
-                  <TableRow>
+                  <TableRow key={item._id}>
                     <TableCell className="font-medium  w-full ">
                       {item.name}
                     </TableCell>

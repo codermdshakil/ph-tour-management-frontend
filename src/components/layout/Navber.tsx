@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Link } from "react-router";
 import { toast } from "sonner";
 import Logo from "../../assets/Icons/Logo";
@@ -80,10 +81,10 @@ export default function Navbar() {
             <PopoverContent align="start" className="w-36 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => (
-                    <>
+                  {navigationLinks.map((link) => (
+                    <Fragment key={`${link.role}-${link.href}`}>
                       {link.role === "PUBLIC" && (
-                        <NavigationMenuItem key={index}>
+                        <NavigationMenuItem>
                           <NavigationMenuLink
                             asChild
                             className="text-muted-foreground hover:text-primary py-1.5 font-medium">
@@ -92,7 +93,7 @@ export default function Navbar() {
                         </NavigationMenuItem>
                       )}
                       {link.role === data?.data?.role && (
-                        <NavigationMenuItem key={index}>
+                        <NavigationMenuItem>
                           <NavigationMenuLink
                             asChild
                             className="text-muted-foreground hover:text-primary py-1.5 font-medium">
@@ -100,7 +101,7 @@ export default function Navbar() {
                           </NavigationMenuLink>
                         </NavigationMenuItem>
                       )}
-                    </>
+                    </Fragment>
                   ))}
                 </NavigationMenuList>
               </NavigationMenu>
@@ -115,10 +116,10 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <>
+                {navigationLinks.map((link) => (
+                  <Fragment key={`${link.role}-${link.href}`}>
                     {link.role === "PUBLIC" && (
-                      <NavigationMenuItem key={index}>
+                      <NavigationMenuItem>
                         <NavigationMenuLink
                           asChild
                           className="text-muted-foreground hover:text-primary py-1.5 font-medium">
@@ -127,7 +128,7 @@ export default function Navbar() {
                       </NavigationMenuItem>
                     )}
                     {link.role === data?.data?.role && (
-                      <NavigationMenuItem key={index}>
+                      <NavigationMenuItem>
                         <NavigationMenuLink
                           asChild
                           className="text-muted-foreground hover:text-primary py-1.5 font-medium">
@@ -135,7 +136,8 @@ export default function Navbar() {
                         </NavigationMenuLink>
                       </NavigationMenuItem>
                     )}
-                  </>
+                    
+                  </Fragment>
                 ))}
               </NavigationMenuList>
             </NavigationMenu>

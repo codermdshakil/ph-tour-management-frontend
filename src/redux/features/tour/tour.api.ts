@@ -7,14 +7,16 @@ import { baseApi } from "../../baseApi";
 
 export const tourApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-
-    addTourType: builder.mutation<IResponse<ITourTypeResponse>,ITourTypePayload>({
+    addTourType: builder.mutation<
+      IResponse<ITourTypeResponse>,
+      ITourTypePayload
+    >({
       query: (tourTypeName) => ({
         url: "/tour/create-tour-type",
         method: "POST",
         data: tourTypeName,
       }),
-      invalidatesTags:["TOUR"]
+      invalidatesTags: ["TOUR"],
     }),
 
     addTour: builder.mutation({
@@ -24,14 +26,13 @@ export const tourApi = baseApi.injectEndpoints({
         data: tourData,
       }),
     }),
-    
 
     removeTourType: builder.mutation({
       query: (tourTypeId) => ({
         url: `/tour/tour-types/${tourTypeId}`,
         method: "DELETE",
       }),
-      invalidatesTags:["TOUR"]
+      invalidatesTags: ["TOUR"],
     }),
 
     getTourTypes: builder.query({
@@ -39,10 +40,11 @@ export const tourApi = baseApi.injectEndpoints({
         url: "/tour/tour-types",
         method: "GET",
       }),
-      providesTags:["TOUR"],
-      transformResponse: (response) => response.data.data // get specific data from backend response
+      providesTags: ["TOUR"],
+      transformResponse: (response) => response.data.data, // get specific data from backend response
     }),
-     getAllTours: builder.query({
+
+    getAllTours: builder.query({
       query: (params) => ({
         url: "/tour",
         method: "GET",
@@ -51,17 +53,13 @@ export const tourApi = baseApi.injectEndpoints({
       providesTags: ["TOUR"],
       transformResponse: (response) => response.data,
     }),
-
-
   }),
 });
 
-export const { 
-
+export const {
   useAddTourMutation,
   useGetAllToursQuery,
   useAddTourTypeMutation,
   useGetTourTypesQuery,
-  useRemoveTourTypeMutation
-
+  useRemoveTourTypeMutation,
 } = tourApi;

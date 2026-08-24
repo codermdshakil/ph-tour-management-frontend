@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Textarea } from "../../components/ui/textarea";
 import type { FileMetadata } from "../../hooks/use-file-upload";
 import { cn } from "../../lib/utils";
-import { useGetAllDivisionQuery } from "../../redux/features/division/division.api";
+import { useGetDivisionsQuery } from "../../redux/features/division/division.api";
 import { useAddTourMutation, useGetTourTypesQuery } from "../../redux/features/tour/tour.api";
 
 const formSchema = z.object({
@@ -42,8 +42,9 @@ const formSchema = z.object({
 
 export default function AddTour() {
   const [images, setImages] = useState<(File | FileMetadata)[] | []>([]);
+  const [uploaderKey, setUploaderKey] = useState(0);
 
-  const { data: divisionData, isLoading: divisionLoading } = useGetAllDivisionQuery(undefined);
+  const { data: divisionData, isLoading: divisionLoading } = useGetDivisionsQuery(undefined);
   const { data: tourTypeData } = useGetTourTypesQuery(undefined);
   const [addTour] = useAddTourMutation();
 
@@ -64,42 +65,42 @@ export default function AddTour() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "Cox's Bazar Beach Adventure",
-      description:
-        "Experience the world's longest natural sea beach with golden sandy shores, crystal clear waters, and breathtaking sunsets. Enjoy beach activities, local seafood, and explore nearby attractions including Himchari National Park and Inani Beach.",
-      location: "Cox's Bazar",
-      costFrom: "15000",
-      startDate: new Date(),
-      // eslint-disable-next-line react-hooks/purity
-      endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days later
-      departureLocation: "Dhaka",
-      arrivalLocation: "Cox's Bazar",
-      included: [
-        { value: "Accommodation for 2 nights" },
-        { value: "All meals (breakfast, lunch, dinner)" },
-        { value: "Transportation (AC bus)" },
-        { value: "Professional tour guide" },
-      ],
-      excluded: [
-        { value: "Personal expenses" },
-        { value: "Extra activities not mentioned" },
-        { value: "Travel insurance" },
-      ],
-      amenities: [
-        { value: "Air-conditioned rooms" },
-        { value: "Free WiFi" },
-        { value: "Swimming pool access" },
-        { value: "Beach access" },
-      ],
-      tourPlan: [
-        { value: "Day 1: Arrival and beach exploration" },
-        { value: "Day 2: Himchari National Park visit" },
-        { value: "Day 3: Inani Beach and departure" },
-      ],
-      maxGuest: "25",
-      minAge: "5",
-      division: "",
-      tourType: "",
+      // title: "Cox's Bazar Beach Adventure",
+      // description:
+      //   "Experience the world's longest natural sea beach with golden sandy shores, crystal clear waters, and breathtaking sunsets. Enjoy beach activities, local seafood, and explore nearby attractions including Himchari National Park and Inani Beach.",
+      // location: "Cox's Bazar",
+      // costFrom: "15000",
+      // startDate: new Date(),
+      // // eslint-disable-next-line react-hooks/purity
+      // endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days later
+      // departureLocation: "Dhaka",
+      // arrivalLocation: "Cox's Bazar",
+      // included: [
+      //   { value: "Accommodation for 2 nights" },
+      //   { value: "All meals (breakfast, lunch, dinner)" },
+      //   { value: "Transportation (AC bus)" },
+      //   { value: "Professional tour guide" },
+      // ],
+      // excluded: [
+      //   { value: "Personal expenses" },
+      //   { value: "Extra activities not mentioned" },
+      //   { value: "Travel insurance" },
+      // ],
+      // amenities: [
+      //   { value: "Air-conditioned rooms" },
+      //   { value: "Free WiFi" },
+      //   { value: "Swimming pool access" },
+      //   { value: "Beach access" },
+      // ],
+      // tourPlan: [
+      //   { value: "Day 1: Arrival and beach exploration" },
+      //   { value: "Day 2: Himchari National Park visit" },
+      //   { value: "Day 3: Inani Beach and departure" },
+      // ],
+      // maxGuest: "25",
+      // minAge: "5",
+      // division: "",
+      // tourType: "",
     },
   });
 
@@ -141,6 +142,7 @@ export default function AddTour() {
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     const toastId = toast.loading("Creating tour....");
+    console.log(data, "hit");
 
     if (images.length === 0) {
       toast.error("Please add some images", { id: toastId });
@@ -183,13 +185,25 @@ export default function AddTour() {
       if (res.success) {
         toast.success("Tour created", { id: toastId });
         form.reset();
+        setImages([]);
+        setUploaderKey((key) => key + 1);
       } else {
         toast.error("Something went wrong", { id: toastId });
       }
     } catch (err: unknown) {
       console.error(err);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      toast.error((err as any).message || "Something went wrong", {
+      const error = err as {
+        data?: { message?: unknown };
+        message?: unknown;
+      };
+      const errorMessage =
+        typeof error.data?.message === "string"
+          ? error.data.message
+          : typeof error.message === "string"
+            ? error.message
+            : "Something went wrong";
+
+      toast.error(errorMessage, {
         id: toastId,
       });
     }
@@ -477,7 +491,10 @@ export default function AddTour() {
                   )}
                 />
                 <div className="flex-1 mt-5">
-                  <MultipleImageUploader onChange={setImages} />
+                  <MultipleImageUploader
+                    key={uploaderKey}
+                    onChange={setImages}
+                  />
                 </div>
               </div>
               <div className="border-t border-muted w-full "></div>

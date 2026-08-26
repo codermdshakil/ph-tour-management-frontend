@@ -7,6 +7,7 @@ import { useGetAllToursQuery } from "../redux/features/tour/tour.api";
 import Loading from "./Loading";
 
 export default function TourDetails() {
+
   const { id } = useParams();
   const { data, isLoading } = useGetAllToursQuery({ _id: id });
 
@@ -24,9 +25,9 @@ export default function TourDetails() {
 
   const tourData = data?.[0];
 
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -49,7 +50,6 @@ export default function TourDetails() {
 
       {/* Images */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-         {isLoading && <Loading/>}
         {tourData?.images?.map((image, index) => (
           <img
             key={index}

@@ -3,6 +3,7 @@ import type {
   ITourTypePayload,
   ITourTypeResponse,
 } from "../../../types/auth.type";
+import type { ITourPackage } from "../../../types/tour.type";
 import { baseApi } from "../../baseApi";
 
 export const tourApi = baseApi.injectEndpoints({
@@ -44,14 +45,14 @@ export const tourApi = baseApi.injectEndpoints({
       transformResponse: (response) => response.data.data, // get specific data from backend response
     }),
 
-    getAllTours: builder.query({
+    getAllTours: builder.query<ITourPackage[], unknown>({
       query: (params) => ({
         url: "/tour",
         method: "GET",
         params: params,
       }),
       providesTags: ["TOUR"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response : IResponse<ITourPackage[]>) => response.data,
     }),
   }),
 });
